@@ -2823,7 +2823,8 @@ module Fs_operations = struct
         (mac_os_x_map_rpath env s0 spath) (* coverage:linux:posix:irrelevant *)
       else spath)     (* coverage:mac_os_x:irrelevant *)
     in
-    fsop_link_checks env spath dpath >>= (fun _ -> fsop_link_core env spath dpath)))
+    fsop_link_checks env spath dpath >>= (fun _ ->
+    fsop_link_core env spath dpath) ||| fsm_raise ENOSYS))
 
 
 
@@ -4360,7 +4361,7 @@ But this is surely not POSIX, and violates the invariant that a call that return
      fsmonad 'impl ret_value
   let fsop_symlink env src dst = (
     fsop_symlink_checks env src dst >>= (fun _ ->
-    fsop_symlink_core env src dst))
+    fsop_symlink_core env src dst) ||| fsm_raise ENOSYS)
 
 
 
